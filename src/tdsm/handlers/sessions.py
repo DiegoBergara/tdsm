@@ -1,4 +1,4 @@
-"""Sessions handler: /new, /list, /use, /current, /rename, /kill. Auth is done before routing."""
+"""Sessions handler: /new, /list, /use, /current, /rename, /kill, /killall. Auth is done before routing."""
 
 from telegram import Update
 from telegram.ext import ContextTypes
@@ -137,3 +137,27 @@ async def handle_kill(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         await update.message.reply_text(f"Session '{name}' killed.")
     except ValueError as e:
         await update.message.reply_text(str(e))
+
+
+async def handle_killall(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Kill all sessions: /killall."""
+    if not update.message:
+        return
+    manager = _manager(context)
+    sessions = manager.list_sessions()
+    if not sessions:
+        await update.message.reply_text("No sessions to kill.")
+        return
+    killed = []
+    errors = []
+    for s in sessions:
+        name = s["session_name"]
+        try:
+            manager.kill_session(name)
+            killed.append(name)
+        except ValueError as e:
+            errors.append(f"{name}: {e}")
+    lines = [f"Killed {len(killed)} session(s): {', '.join(killed)}."]
+    if errors:
+        lines.append("Errors: " + "; ".join(errors))
+    await update.message.reply_text("\n".join(lines))

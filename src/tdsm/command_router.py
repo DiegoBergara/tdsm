@@ -27,6 +27,7 @@ COMMANDS_LINES = [
     "/modes - List modes",
     "/ctrlc - Send Ctrl+C",
     "/kill - Kill session",
+    "/killall - Kill all sessions",
     "/rename - Rename session",
     "/clear - Clear terminal",
 ]
@@ -78,6 +79,8 @@ async def dispatch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await sessions.handle_rename(update, context)
         elif cmd == "kill":
             await sessions.handle_kill(update, context)
+        elif cmd == "killall":
+            await sessions.handle_killall(update, context)
         elif cmd == "send":
             await execution.handle_send(update, context)
         elif cmd == "ctrlc":

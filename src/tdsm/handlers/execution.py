@@ -9,6 +9,7 @@ from tdsm.session_manager import SessionManager
 from tdsm.history_store import HistoryStore
 from tdsm.providers.registry import ProviderRegistry
 from tdsm.update_utils import get_command_text
+from tdsm.handlers import observability
 
 
 def _manager(context: ContextTypes.DEFAULT_TYPE) -> SessionManager:
@@ -50,7 +51,8 @@ async def handle_message_as_command(update: Update, context: ContextTypes.DEFAUL
     formatted = provider.format_user_command(command)
     tmux_controller.send_keys(current, formatted, enter=True)
     _history(context).append(chat_id, current, command)
-    await update.message.reply_text("Command sent.")
+    logs_text = observability.get_logs_text(context, current)
+    await update.message.reply_text(logs_text or "Command sent.")
 
 
 async def handle_send(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -76,4 +78,5 @@ async def handle_send(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     formatted = provider.format_user_command(command) if provider else command
     tmux_controller.send_keys(session_name, formatted, enter=True)
     _history(context).append(update.effective_chat.id, session_name, command)
-    await update.message.reply_text(f"Command sent to {session_name}.")
+    logs_text = observability.get_logs_text(context, session_name)
+    await update.message.reply_text(logs_text or f"Command sent to {session_name}.")

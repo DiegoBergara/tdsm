@@ -26,6 +26,38 @@ def _default_log_lines(context: ContextTypes.DEFAULT_TYPE) -> int:
     return context.bot_data["config"].default_log_lines
 
 
+def get_logs_text(context: ContextTypes.DEFAULT_TYPE, session_name: str) -> str | None:
+    """Build the same output as /logs for a given session. Returns None if session not found."""
+    if not _manager(context).get_session_metadata(session_name):
+        return None
+    try:
+        out = tmux_controller.capture_pane(session_name, lines=_default_log_lines(context))
+        return out or "(empty)"
+    except Exception as e:
+        return f"Error: {e}"
+
+
+def get_status_text(context: ContextTypes.DEFAULT_TYPE, session_name: str) -> str | None:
+    """Build the same status message as /status for a given session. Returns None if session not found."""
+    manager = _manager(context)
+    meta = manager.get_session_metadata(session_name)
+    if not meta:
+        return None
+    try:
+        last_output = tmux_controller.capture_pane(session_name, lines=_default_log_lines(context))
+    except Exception as e:
+        last_output = str(e)
+    lines = [
+        f"Session: {meta['session_name']}",
+        f"Provider: {meta['provider_id']}",
+        f"Mode: {meta['mode']}",
+        "",
+        "Last output:",
+        last_output or "(empty)",
+    ]
+    return "\n".join(lines)
+
+
 async def handle_status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Session status: /status or /status <session>. Shows name, provider, mode, last output."""
     if not update.message or not update.effective_chat:
@@ -40,24 +72,11 @@ async def handle_status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     if not session_name:
         await update.message.reply_text("No current session. Use /status <session> or /use <name>.")
         return
-    manager = _manager(context)
-    meta = manager.get_session_metadata(session_name)
-    if not meta:
+    status_text = get_status_text(context, session_name)
+    if status_text is None:
         await update.message.reply_text(f"Session not found: {session_name}")
         return
-    try:
-        last_output = tmux_controller.capture_pane(session_name, lines=_default_log_lines(context))
-    except Exception as e:
-        last_output = str(e)
-    lines = [
-        f"Session: {meta['session_name']}",
-        f"Provider: {meta['provider_id']}",
-        f"Mode: {meta['mode']}",
-        "",
-        "Last output:",
-        last_output or "(empty)",
-    ]
-    await update.message.reply_text("\n".join(lines))
+    await update.message.reply_text(status_text)
 
 
 async def handle_logs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -74,14 +93,11 @@ async def handle_logs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if not session_name:
         await update.message.reply_text("No current session. Use /logs <session> or /use <name>.")
         return
-    if not _manager(context).get_session_metadata(session_name):
+    logs_text = get_logs_text(context, session_name)
+    if logs_text is None:
         await update.message.reply_text(f"Session not found: {session_name}")
         return
-    try:
-        out = tmux_controller.capture_pane(session_name, lines=_default_log_lines(context))
-        await update.message.reply_text(out or "(empty)")
-    except Exception as e:
-        await update.message.reply_text(f"Error: {e}")
+    await update.message.reply_text(logs_text)
 
 
 async def handle_history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
