@@ -23,14 +23,14 @@
 
 ## 5. Providers
 
-- [ ] 5.1 Define BaseProvider interface (id, display_name, is_available, get_modes, default_mode, next_mode, bootstrap_commands, format_user_command)
-- [ ] 5.2 Implement provider registry: register providers, get by id, list all with availability
-- [ ] 5.3 Implement shell provider (always available, single mode "shell", pass-through format_user_command)
-- [ ] 5.4 Implement claude-code provider (shallow: availability check, modes, format_user_command)
-- [ ] 5.5 Implement codex provider (shallow)
-- [ ] 5.6 Implement cursor-cli provider (shallow)
-- [ ] 5.7 Implement gemini-cli provider (shallow)
-- [ ] 5.8 Wire built-in providers into registry at startup
+- [x] 5.1 Define BaseProvider interface (id, display_name, is_available, get_modes, default_mode, next_mode, bootstrap_commands, format_user_command)
+- [x] 5.2 Implement provider registry: register providers, get by id, list all with availability
+- [x] 5.3 Implement shell provider (always available, single mode "shell", pass-through format_user_command)
+- [x] 5.4 Implement claude-code provider (shallow: availability check, modes, format_user_command)
+- [x] 5.5 Implement codex provider (shallow)
+- [x] 5.6 Implement cursor-cli provider (shallow)
+- [x] 5.7 Implement gemini-cli provider (shallow)
+- [x] 5.8 Wire built-in providers into registry at startup
 
 ## 6. Session manager
 
