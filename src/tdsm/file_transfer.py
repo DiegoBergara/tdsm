@@ -132,6 +132,10 @@ def save_uploaded_files(
     Raises FileTransferError on violation.
     """
     dest_dir = dest_dir.resolve()
+    if dest_dir.exists() and dest_dir.is_file():
+        raise FileTransferError(
+            "Destination path is a file; use a directory path for uploads (e.g. . or folder name)."
+        )
     for filename, content in files:
         if len(content) > max_size_per_file:
             raise FileTransferError(
@@ -141,6 +145,10 @@ def save_uploaded_files(
         safe = (dest_dir / filename).resolve()
         if not str(safe).startswith(str(dest_dir) + os.sep) and safe != dest_dir:
             raise FileTransferError(f"Invalid filename: {filename}")
+        if safe.parent.exists() and safe.parent.is_file():
+            raise FileTransferError(
+                f"Cannot save here: '{safe.parent}' exists as a file, not a directory."
+            )
         safe.parent.mkdir(parents=True, exist_ok=True)
         safe.write_bytes(content)
 
