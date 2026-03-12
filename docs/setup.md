@@ -1,5 +1,29 @@
 # Setup
 
+## Python y pyenv
+
+El proyecto usa **Python 3.11+**. Se recomienda [pyenv](https://github.com/pyenv/pyenv) para gestionar la versión.
+
+**Dependencias de compilación (Ubuntu/Debian):**
+
+```bash
+sudo apt update
+sudo apt install -y make build-essential libssl-dev zlib1g-dev \
+  libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+  libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+```
+
+**Uso con pyenv (tras instalarlo y tenerlo en el PATH):**
+
+```bash
+pyenv install 3.12          # instalar Python 3.12
+pyenv rehash                # actualizar shims
+# En este repo, .python-version fija 3.12; al hacer cd aquí se usará automáticamente
+python --version            # debe mostrar 3.12.x
+```
+
+Para usar una versión concreta solo en este proyecto: `pyenv local 3.12`. Para global: `pyenv global 3.12`.
+
 ## BotFather
 
 1. Open [@BotFather](https://t.me/BotFather) in Telegram.
