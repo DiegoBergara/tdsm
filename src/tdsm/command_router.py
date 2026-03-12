@@ -9,6 +9,33 @@ from telegram.ext import ContextTypes
 from tdsm.auth import check_access, AccessDenied
 from tdsm.handlers import sessions, execution, control, observability, providers_handler, modes, file_transfer as file_transfer_handler
 
+# Single source of truth for command list (used by /help and /start).
+COMMANDS_LINES = [
+    "help - Show this help",
+    "providers - List providers",
+    "new - Create session",
+    "list - List sessions",
+    "use - Select session",
+    "current - Show current session",
+    "send - Send command to another session",
+    "download, dl - Download file or folder (as ZIP)",
+    "upload - Upload file(s); use --extract for ZIP",
+    "status - Session status",
+    "logs - Session logs",
+    "history - Command history",
+    "mode - Switch assistant mode",
+    "modes - List modes",
+    "ctrlc - Send Ctrl+C",
+    "kill - Kill session",
+    "rename - Rename session",
+    "clear - Clear terminal",
+]
+
+
+def get_commands_text() -> str:
+    """Return the list of commands as a single string (header + lines)."""
+    return "Commands:\n" + "\n".join(COMMANDS_LINES)
+
 
 async def dispatch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Check auth, then parse message and dispatch to the appropriate handler."""
@@ -72,6 +99,8 @@ async def dispatch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await file_transfer_handler.handle_download(update, context)
         elif cmd == "upload":
             await file_transfer_handler.handle_upload(update, context)
+        elif cmd == "start":
+            await handle_start(update, context)
         elif cmd == "help":
             await handle_help(update, context)
         else:
@@ -84,25 +113,15 @@ async def handle_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     """List commands: /help."""
     if not update.message:
         return
-    lines = [
-        "Commands:",
-        "help - Show this help",
-        "providers - List providers",
-        "new - Create session",
-        "list - List sessions",
-        "use - Select session",
-        "current - Show current session",
-        "send - Send command to another session",
-        "download, dl - Download file or folder (as ZIP)",
-        "upload - Upload file(s); use --extract for ZIP",
-        "status - Session status",
-        "logs - Session logs",
-        "history - Command history",
-        "mode - Switch assistant mode",
-        "modes - List modes",
-        "ctrlc - Send Ctrl+C",
-        "kill - Kill session",
-        "rename - Rename session",
-        "clear - Clear terminal",
-    ]
-    await update.message.reply_text("\n".join(lines))
+    await update.message.reply_text(get_commands_text())
+
+
+async def handle_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Welcome message on /start: purpose + list of commands."""
+    if not update.message:
+        return
+    purpose = (
+        "TDSM es un bot para gestionar sesiones de desarrollo (tmux), "
+        "ejecutar comandos en remoto y usar asistentes CLI.\n\n"
+    )
+    await update.message.reply_text(purpose + get_commands_text())

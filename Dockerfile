@@ -5,11 +5,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends tmux \
 
 WORKDIR /app
 
-COPY pyproject.toml ./
-RUN pip install --no-cache-dir -e .
-
+COPY pyproject.toml README.md LICENSE ./
 COPY src/ ./src/
-COPY README.md LICENSE ./
+RUN pip install --no-cache-dir -e .
 
 # Persistent data (database) should be mounted at /data
 ENV DATABASE_PATH=/data/tdsm.db
