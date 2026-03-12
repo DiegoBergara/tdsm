@@ -6,6 +6,7 @@ from telegram.ext import ContextTypes
 from tdsm.session_context import SessionContextStore
 from tdsm.session_manager import SessionManager
 from tdsm.providers.registry import ProviderRegistry
+from tdsm.update_utils import get_command_text
 
 
 def _manager(context: ContextTypes.DEFAULT_TYPE) -> SessionManager:
@@ -22,10 +23,11 @@ def _registry(context: ContextTypes.DEFAULT_TYPE) -> ProviderRegistry:
 
 async def handle_new(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Create session: /new <name> [provider]. Default provider: shell."""
-    if not update.message or not update.message.text:
+    text = get_command_text(update, context)
+    if not update.message or not text:
         await update.message.reply_text("Usage: /new <name> [provider]")
         return
-    parts = update.message.text.split()
+    parts = text.split()
     if len(parts) < 2:
         await update.message.reply_text("Usage: /new <name> [provider]")
         return
@@ -65,9 +67,13 @@ async def handle_list(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
 async def handle_use(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Set current session: /use <name>."""
-    if not update.message or not update.message.text or not update.effective_chat:
+    if not update.message or not update.effective_chat:
         return
-    parts = update.message.text.split()
+    text = get_command_text(update, context)
+    if not text:
+        await update.message.reply_text("Usage: /use <name>")
+        return
+    parts = text.split()
     if len(parts) < 2:
         await update.message.reply_text("Usage: /use <name>")
         return
@@ -93,9 +99,13 @@ async def handle_current(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 async def handle_rename(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Rename session: /rename <old> <new>."""
-    if not update.message or not update.message.text:
+    if not update.message:
         return
-    parts = update.message.text.split(maxsplit=2)
+    text = get_command_text(update, context)
+    if not text:
+        await update.message.reply_text("Usage: /rename <old> <new>")
+        return
+    parts = text.split(maxsplit=2)
     if len(parts) < 3:
         await update.message.reply_text("Usage: /rename <old> <new>")
         return
@@ -110,9 +120,13 @@ async def handle_rename(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 async def handle_kill(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Kill session: /kill <session>."""
-    if not update.message or not update.message.text:
+    if not update.message:
         return
-    parts = update.message.text.split()
+    text = get_command_text(update, context)
+    if not text:
+        await update.message.reply_text("Usage: /kill <session>")
+        return
+    parts = text.split()
     if len(parts) < 2:
         await update.message.reply_text("Usage: /kill <session>")
         return

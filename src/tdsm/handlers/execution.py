@@ -8,6 +8,7 @@ from tdsm.session_context import SessionContextStore
 from tdsm.session_manager import SessionManager
 from tdsm.history_store import HistoryStore
 from tdsm.providers.registry import ProviderRegistry
+from tdsm.update_utils import get_command_text
 
 
 def _manager(context: ContextTypes.DEFAULT_TYPE) -> SessionManager:
@@ -54,9 +55,13 @@ async def handle_message_as_command(update: Update, context: ContextTypes.DEFAUL
 
 async def handle_send(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send command to another session: /send <session> <command>."""
-    if not update.message or not update.message.text or not update.effective_chat:
+    if not update.message or not update.effective_chat:
         return
-    parts = update.message.text.split(maxsplit=2)
+    text = get_command_text(update, context)
+    if not text:
+        await update.message.reply_text("Usage: /send <session> <command>")
+        return
+    parts = text.split(maxsplit=2)
     if len(parts) < 3:
         await update.message.reply_text("Usage: /send <session> <command>")
         return

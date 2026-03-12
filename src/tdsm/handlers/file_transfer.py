@@ -5,6 +5,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from tdsm import tmux_controller
+from tdsm.update_utils import get_command_text
 from tdsm.file_transfer import (
     FileTransferError,
     resolve_and_validate_path,
@@ -45,8 +46,8 @@ async def handle_download(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         )
         return
 
-    text = (update.message.text or "").strip()
-    parts = text.split(maxsplit=1)
+    text = get_command_text(update, context)
+    parts = text.split(maxsplit=1) if text else []
     path_arg = (parts[1] if len(parts) > 1 else "").strip()
     if not path_arg:
         await update.message.reply_text("Usage: /download <path> or /dl <path>")
@@ -87,8 +88,8 @@ async def handle_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         )
         return
 
-    text = (update.message.text or "").strip()
-    parts = text.split()
+    text = get_command_text(update, context)
+    parts = text.split() if text else []
     extract = False
     path_arg = ""
     i = 1

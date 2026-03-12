@@ -80,3 +80,31 @@ tdsm
 ```
 
 Or with a `.env` file (use a loader such as `python-dotenv` or export variables manually).
+
+## Debugging (el bot no responde a /start o /new)
+
+Si envías `/start` o `/new` y el bot no contesta:
+
+1. **Ver los logs en la terminal**  
+   Arranca el bot desde una terminal (no en segundo plano) para ver toda la salida:
+   ```bash
+   cd /ruta/al/tdsm
+   export $(grep -v '^#' .env | xargs)   # cargar .env en el shell
+   tdsm
+   ```
+
+2. **Activar logs detallados**  
+   En `.env` pon:
+   ```env
+   LOG_LEVEL=DEBUG
+   ```
+   Así verás cada update que recibe el bot y posibles errores.
+
+3. **Comprobar que tu usuario está permitido**  
+   Tu *user ID* de Telegram debe estar en `ALLOWED_USER_IDS` (varios IDs separados por comas). Para saber tu ID: escribe a [@userinfobot](https://t.me/userinfobot) en Telegram y usa el número que te devuelve en `ALLOWED_USER_IDS`.
+
+4. **Webhook**  
+   Si el bot se usó antes con webhook, Telegram puede seguir enviando los updates ahí y el polling no recibe nada. Desde v0.1.0 el bot borra el webhook al arrancar (`delete_webhook`) para que el polling funcione en local. Si aun así no responde, puedes borrarlo a mano con la API de Telegram (por ejemplo con `curl` y tu token).
+
+5. **Errores en handlers**  
+   Si hay una excepción dentro de un comando, se registra en los logs y el bot puede enviarte "Error interno. Revisa los logs del bot (LOG_LEVEL=DEBUG)." Revisa el traceback en la terminal.

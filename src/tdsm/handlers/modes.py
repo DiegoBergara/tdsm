@@ -6,6 +6,7 @@ from telegram.ext import ContextTypes
 from tdsm.session_context import SessionContextStore
 from tdsm.session_manager import SessionManager
 from tdsm.providers.registry import ProviderRegistry
+from tdsm.update_utils import get_command_text
 
 
 def _manager(context: ContextTypes.DEFAULT_TYPE) -> SessionManager:
@@ -38,7 +39,8 @@ async def handle_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if not provider:
         await update.message.reply_text(f"Provider not found: {meta['provider_id']}")
         return
-    parts = (update.message.text or "").split()
+    text = get_command_text(update, context)
+    parts = text.split() if text else []
     if len(parts) >= 2:
         new_mode = parts[1].strip()
         if new_mode not in provider.get_modes():

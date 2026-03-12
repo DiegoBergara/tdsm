@@ -2,7 +2,8 @@
 
 import logging
 
-from telegram.ext import Application, MessageHandler, filters
+from telegram import Update
+from telegram.ext import Application, MessageHandler, filters, ContextTypes
 
 from tdsm.config import load as load_config
 from tdsm.db import init_db
@@ -13,6 +14,21 @@ from tdsm.providers import ProviderRegistry, register_builtin_providers
 from tdsm.command_router import dispatch
 
 logger = logging.getLogger(__name__)
+
+
+async def _post_init(application: Application) -> None:
+    """Remove webhook so polling receives updates (e.g. after switching from webhook deployment)."""
+    await application.bot.delete_webhook(drop_pending_updates=True)
+    logger.info("Webhook removed; polling will receive updates.")
+
+
+async def _error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Log handler errors so /start and other commands don't fail silently."""
+    logger.exception("Error while handling update: %s", context.error)
+    if isinstance(update, Update) and update.effective_message:
+        await update.effective_message.reply_text(
+            "Error interno. Revisa los logs del bot (LOG_LEVEL=DEBUG)."
+        )
 
 
 def main() -> None:
@@ -31,6 +47,7 @@ def main() -> None:
     application = (
         Application.builder()
         .token(config.telegram_bot_token)
+        .post_init(_post_init)
         .build()
     )
     application.bot_data["config"] = config
@@ -42,6 +59,7 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, dispatch))
     application.add_handler(MessageHandler(filters.COMMAND, dispatch))
     application.add_handler(MessageHandler(filters.Document.ALL, dispatch))
+    application.add_error_handler(_error_handler)
 
     logger.info("Starting bot polling...")
     application.run_polling(allowed_updates=["message"])

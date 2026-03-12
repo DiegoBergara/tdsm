@@ -6,6 +6,7 @@ from telegram.ext import ContextTypes
 from tdsm import tmux_controller
 from tdsm.session_context import SessionContextStore
 from tdsm.session_manager import SessionManager
+from tdsm.update_utils import get_command_text
 
 
 def _manager(context: ContextTypes.DEFAULT_TYPE) -> SessionManager:
@@ -21,7 +22,8 @@ async def handle_ctrlc(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     if not update.message or not update.effective_chat:
         return
     chat_id = update.effective_chat.id
-    parts = (update.message.text or "").split()
+    text = get_command_text(update, context)
+    parts = text.split() if text else []
     if len(parts) >= 2:
         session_name = parts[1].strip()
     else:
@@ -41,7 +43,8 @@ async def handle_clear(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     if not update.message or not update.effective_chat:
         return
     chat_id = update.effective_chat.id
-    parts = (update.message.text or "").split()
+    text = get_command_text(update, context)
+    parts = text.split() if text else []
     if len(parts) >= 2:
         session_name = parts[1].strip()
     else:

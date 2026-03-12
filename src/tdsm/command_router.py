@@ -60,11 +60,12 @@ async def dispatch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
     if text.startswith("/"):
         parts = text.split(maxsplit=1)
-        cmd = parts[0].lstrip("/").lower()
+        # Force command to lowercase to avoid case-sensitivity errors (e.g. /New vs /new)
+        cmd = (parts[0].lstrip("/") or "").lower()
         # Normalize: /new_ session -> cmd "new" with rest
         rest = parts[1] if len(parts) > 1 else ""
-        # Reconstruct message.text for handlers that parse it (e.g. /new name provider)
-        update.message.text = f"/{cmd} {rest}".strip()
+        # Pass normalized text via context (Message is immutable in python-telegram-bot)
+        context.user_data["_command_text"] = f"/{cmd} {rest}".strip()
         if cmd == "new":
             await sessions.handle_new(update, context)
         elif cmd == "list":
