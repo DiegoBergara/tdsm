@@ -8,7 +8,7 @@
 
 ## 2. Auth
 
-- [ ] 2.1 Implement auth layer: allowlist check using ALLOWED_USER_IDS before routing; reject non-allowlisted users with clear response
+- [x] 2.1 Implement auth layer: allowlist check using ALLOWED_USER_IDS before routing; reject non-allowlisted users with clear response
 
 ## 3. Persistence
 
