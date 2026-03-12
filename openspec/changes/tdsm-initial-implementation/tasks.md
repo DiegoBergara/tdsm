@@ -18,8 +18,8 @@
 
 ## 4. Tmux controller
 
-- [ ] 4.1 Implement TmuxController: create session, send keys (including Ctrl+C), capture pane output (last N lines), kill session, clear (send clear command)
-- [ ] 4.2 Add abstraction so handlers never call tmux CLI directly; document max output size / truncation for Telegram
+- [x] 4.1 Implement TmuxController: create session, send keys (including Ctrl+C), capture pane output (last N lines), kill session, clear (send clear command)
+- [x] 4.2 Add abstraction so handlers never call tmux CLI directly; document max output size / truncation for Telegram
 
 ## 5. Providers
 
