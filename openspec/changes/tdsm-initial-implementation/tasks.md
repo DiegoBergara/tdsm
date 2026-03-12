@@ -13,7 +13,7 @@
 ## 3. Persistence
 
 - [x] 3.1 Define and create SQLite schema: managed_sessions, chat_context, command_history (per PRD)
-- [ ] 3.2 Implement session context store (get/set current session per chat_id; persist to chat_context; optional in-memory cache)
+- [x] 3.2 Implement session context store (get/set current session per chat_id; persist to chat_context; optional in-memory cache)
 - [ ] 3.3 Implement history_store: append command (chat_id, session_name, command, timestamp) and query last N per session
 
 ## 4. Tmux controller
