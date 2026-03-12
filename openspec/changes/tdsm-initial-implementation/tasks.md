@@ -49,9 +49,9 @@
 
 ## 8. Bot entry and routing
 
-- [ ] 8.1 Implement command router: parse command/prefix and dispatch to correct handler (auth already applied)
-- [ ] 8.2 Wire bot entry point: load config, init DB and schema, init registry and providers, register handlers with router, start polling
-- [ ] 8.3 Add /help that lists commands (per bot-setup spec)
+- [x] 8.1 Implement command router: parse command/prefix and dispatch to correct handler (auth already applied)
+- [x] 8.2 Wire bot entry point: load config, init DB and schema, init registry and providers, register handlers with router, start polling
+- [x] 8.3 Add /help that lists commands (per bot-setup spec)
 
 ## 9. Docs and ops
 
