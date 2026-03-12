@@ -42,8 +42,8 @@
 
 - [x] 7.1 Sessions handler: /new, /list, /use, /current, /rename, /kill (delegate to session manager and context store)
 - [x] 7.2 Execution handler: run message-as-command in current session (provider.format_user_command + tmux send); /send <session> <command> to specific session; record command in history_store
-- [ ] 7.3 Control handler: /ctrlc [session], /clear [session] via TmuxController
-- [ ] 7.4 Observability handler: /status [session], /logs [session], /history [session] (use DEFAULT_LOG_LINES for logs)
+- [x] 7.3 Control handler: /ctrlc [session], /clear [session] via TmuxController
+- [x] 7.4 Observability handler: /status [session], /logs [session], /history [session] (use DEFAULT_LOG_LINES for logs)
 - [ ] 7.5 Providers handler: /providers (list from registry with availability)
 - [ ] 7.6 Modes handler: /mode (cycle), /mode <mode> (set), /modes (list); persist mode in session metadata and use provider next_mode/default_mode
 
