@@ -64,3 +64,18 @@ class SessionContextStore:
         current = self.get_current_session(chat_id)
         if current == old_name:
             self.set_current_session(chat_id, new_name)
+
+    def rename_current_session(self, old_name: str, new_name: str) -> None:
+        """Update current_session from old_name to new_name for all chats (e.g. after session rename)."""
+        conn = sqlite3.connect(self._db_path)
+        try:
+            conn.execute(
+                "UPDATE chat_context SET current_session = ? WHERE current_session = ?",
+                (new_name, old_name),
+            )
+            conn.commit()
+            for cid, name in list(self._cache.items()):
+                if name == old_name:
+                    self._cache[cid] = new_name
+        finally:
+            conn.close()

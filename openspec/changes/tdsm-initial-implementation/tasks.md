@@ -34,9 +34,9 @@
 
 ## 6. Session manager
 
-- [ ] 6.1 Implement session manager: create session (tmux + provider + persist to managed_sessions), list sessions, get session metadata, rename (tmux + DB), kill (tmux + DB)
-- [ ] 6.2 Integrate session manager with session context store (set current on /use; update on rename/kill if current affected)
-- [ ] 6.3 On session create: run provider bootstrap_commands in tmux if any; set initial mode from provider default_mode
+- [x] 6.1 Implement session manager: create session (tmux + provider + persist to managed_sessions), list sessions, get session metadata, rename (tmux + DB), kill (tmux + DB)
+- [x] 6.2 Integrate session manager with session context store (set current on /use; update on rename/kill if current affected)
+- [x] 6.3 On session create: run provider bootstrap_commands in tmux if any; set initial mode from provider default_mode
 
 ## 7. Handlers
 
