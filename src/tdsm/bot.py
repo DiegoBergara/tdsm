@@ -41,6 +41,7 @@ def main() -> None:
 
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, dispatch))
     application.add_handler(MessageHandler(filters.COMMAND, dispatch))
+    application.add_handler(MessageHandler(filters.Document.ALL, dispatch))
 
     logger.info("Starting bot polling...")
     application.run_polling(allowed_updates=["message"])

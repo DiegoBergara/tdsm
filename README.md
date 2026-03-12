@@ -29,7 +29,7 @@ Copy `.env.example` to `.env` and set:
 - **TELEGRAM_BOT_TOKEN** – from [@BotFather](https://t.me/BotFather) (`/newbot`)
 - **ALLOWED_USER_IDS** – comma-separated Telegram user IDs (e.g. `123456789`)
 
-Optional: `DATABASE_PATH`, `LOG_LEVEL`, `DEFAULT_LOG_LINES`. See [docs/setup.md](docs/setup.md) and [.env.example](.env.example).
+Optional: `DATABASE_PATH`, `LOG_LEVEL`, `DEFAULT_LOG_LINES`. For file transfer (download/upload): `FILE_TRANSFER_BASE_PATH`, `FILE_DOWNLOAD_MAX_SIZE`, `FILE_UPLOAD_MAX_SIZE`, `ZIP_MAX_SIZE` (see [docs/setup.md](docs/setup.md)). See also [.env.example](.env.example).
 
 ## Run
 

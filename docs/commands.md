@@ -20,6 +20,14 @@ All commands require the user to be in the allowlist (`ALLOWED_USER_IDS`). Messa
 | _(plain text)_ | Run as command in the current session. |
 | `/send <session> <command>` | Run command in another session without changing current. |
 
+## File transfer
+
+| Command | Description |
+|--------|-------------|
+| `/download <path>` or `/dl <path>` | Download a file from the session’s working tree, or a folder as a ZIP. Path is relative to session cwd or absolute within the allowed base. |
+| `/upload [path]` | Set upload destination (default: session cwd). Then send file(s) as document(s). |
+| `/upload --extract [path]` | Same as `/upload` but the next document must be a ZIP; it will be extracted at the destination. |
+
 ## Control
 
 | Command | Description |

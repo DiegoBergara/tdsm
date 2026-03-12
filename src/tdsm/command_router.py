@@ -7,7 +7,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from tdsm.auth import check_access, AccessDenied
-from tdsm.handlers import sessions, execution, control, observability, providers_handler, modes
+from tdsm.handlers import sessions, execution, control, observability, providers_handler, modes, file_transfer as file_transfer_handler
 
 
 async def dispatch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -25,6 +25,10 @@ async def dispatch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text(e.message)
         return
     text = (update.message.text or "").strip()
+    # Handle messages with document (upload)
+    if update.message.document:
+        await file_transfer_handler.handle_document_message(update, context)
+        return
     if not text:
         return
     if text.startswith("/"):
@@ -64,6 +68,10 @@ async def dispatch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await modes.handle_mode(update, context)
         elif cmd == "modes":
             await modes.handle_modes(update, context)
+        elif cmd in ("download", "dl"):
+            await file_transfer_handler.handle_download(update, context)
+        elif cmd == "upload":
+            await file_transfer_handler.handle_upload(update, context)
         elif cmd == "help":
             await handle_help(update, context)
         else:
@@ -85,6 +93,8 @@ async def handle_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         "use - Select session",
         "current - Show current session",
         "send - Send command to another session",
+        "download, dl - Download file or folder (as ZIP)",
+        "upload - Upload file(s); use --extract for ZIP",
         "status - Session status",
         "logs - Session logs",
         "history - Command history",

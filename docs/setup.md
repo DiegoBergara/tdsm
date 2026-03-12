@@ -42,6 +42,8 @@ list - List sessions
 use - Select session
 current - Show current session
 send - Send command to another session
+download - Download file or folder (as ZIP)
+upload - Upload file(s); use --extract for ZIP
 status - Show session status
 logs - Show session logs
 history - Show command history
@@ -56,6 +58,17 @@ clear - Clear terminal
 ## Environment variables
 
 See `.env.example`. Required: `TELEGRAM_BOT_TOKEN`, `ALLOWED_USER_IDS`. Optional: `DATABASE_PATH`, `LOG_LEVEL`, `DEFAULT_LOG_LINES`.
+
+### File transfer (download/upload)
+
+Optional; only needed if you use `/download` or `/upload`:
+
+- **FILE_TRANSFER_BASE_PATH** – Base directory allowed for transfers. If unset, the session’s working directory is used as the only allowed base (paths must stay under it). Set to a directory path (e.g. `/home/user/workspace`) to allow access under that tree.
+- **FILE_DOWNLOAD_MAX_SIZE** – Max size in bytes for a single file download (default: 20971520 = 20 MiB).
+- **FILE_UPLOAD_MAX_SIZE** – Max size in bytes per uploaded file (default: 20971520 = 20 MiB). Telegram bot API limit is 20 MB.
+- **ZIP_MAX_SIZE** – Max size in bytes for generated or extracted ZIPs (default: 20971520 = 20 MiB).
+
+Recommended: set `FILE_TRANSFER_BASE_PATH` to a dedicated workspace root in production to limit which paths users can read/write.
 
 ## Run
 

@@ -90,3 +90,19 @@ def clear_pane(session_name: str) -> None:
 def rename_session(old_name: str, new_name: str) -> None:
     """Rename a tmux session."""
     _tmux(["rename-session", "-t", old_name, new_name])
+
+
+def get_session_cwd(session_name: str) -> Optional[str]:
+    """
+    Return the current working directory of the session's pane.
+    Uses tmux display-message to get pane_current_path.
+    Returns None if session does not exist or path cannot be determined.
+    """
+    r = _tmux(
+        ["display-message", "-t", session_name, "-p", "#{pane_current_path}"],
+        check=False,
+    )
+    if r.returncode != 0:
+        return None
+    path = (r.stdout or "").strip()
+    return path if path else None
