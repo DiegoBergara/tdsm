@@ -3,7 +3,7 @@
 ## 1. Project setup
 
 - [x] 1.1 Create repository structure (src/tdsm/, tests/, docs/, .github/workflows/)
-- [ ] 1.2 Add pyproject.toml with Python 3.11+, python-telegram-bot, and dev deps (pytest, ruff, black)
+- [x] 1.2 Add pyproject.toml with Python 3.11+, python-telegram-bot, and dev deps (pytest, ruff, black)
 - [ ] 1.3 Add config module reading TELEGRAM_BOT_TOKEN, ALLOWED_USER_IDS, DATABASE_PATH, LOG_LEVEL, DEFAULT_LOG_LINES; fail fast on missing required vars
 
 ## 2. Auth
