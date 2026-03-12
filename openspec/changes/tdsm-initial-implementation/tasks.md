@@ -55,12 +55,12 @@
 
 ## 9. Docs and ops
 
-- [ ] 9.1 Add .env.example with TELEGRAM_BOT_TOKEN, ALLOWED_USER_IDS, DATABASE_PATH, LOG_LEVEL, DEFAULT_LOG_LINES and short descriptions
-- [ ] 9.2 Document BotFather setup and /setcommands payload (help, providers, new, list, use, current, send, status, logs, history, mode, modes, ctrlc, kill, rename, clear)
-- [ ] 9.3 Add docs: architecture.md, commands.md, providers.md, security.md (per PRD)
-- [ ] 9.4 Add Dockerfile and docker-compose.yml with persistent data volume for DATABASE_PATH
-- [ ] 9.5 Add GitHub Actions CI: lint (ruff, black), tests (pytest); mock tmux in tests
-- [ ] 9.6 Add README with install, env, run, and link to BotFather and docs
+- [x] 9.1 Add .env.example with TELEGRAM_BOT_TOKEN, ALLOWED_USER_IDS, DATABASE_PATH, LOG_LEVEL, DEFAULT_LOG_LINES and short descriptions
+- [x] 9.2 Document BotFather setup and /setcommands payload (help, providers, new, list, use, current, send, status, logs, history, mode, modes, ctrlc, kill, rename, clear)
+- [x] 9.3 Add docs: architecture.md, commands.md, providers.md, security.md (per PRD)
+- [x] 9.4 Add Dockerfile and docker-compose.yml with persistent data volume for DATABASE_PATH
+- [x] 9.5 Add GitHub Actions CI: lint (ruff, black), tests (pytest); mock tmux in tests
+- [x] 9.6 Add README with install, env, run, and link to BotFather and docs
 
 ## 10. Tests
 

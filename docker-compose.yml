@@ -1,0 +1,15 @@
+services:
+  tdsm:
+    build: .
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - ALLOWED_USER_IDS=${ALLOWED_USER_IDS}
+      - DATABASE_PATH=/data/tdsm.db
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DEFAULT_LOG_LINES=${DEFAULT_LOG_LINES:-50}
+    volumes:
+      - tdsm-data:/data
+    restart: unless-stopped
+
+volumes:
+  tdsm-data:
