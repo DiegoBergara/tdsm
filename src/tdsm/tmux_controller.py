@@ -78,8 +78,12 @@ def capture_pane(
 
 
 def kill_session(session_name: str) -> None:
-    """Kill the tmux session."""
-    _tmux(["kill-session", "-t", session_name])
+    """Kill the tmux session. No-op if the session does not exist (idempotent)."""
+    r = _tmux(["kill-session", "-t", session_name], check=False)
+    if r.returncode != 0:
+        # Exit 1 = session not found; treat as success (already gone).
+        if r.returncode != 1:
+            raise subprocess.CalledProcessError(r.returncode, [shutil.which("tmux"), "kill-session", "-t", session_name], r.stdout, r.stderr)
 
 
 def clear_pane(session_name: str) -> None:

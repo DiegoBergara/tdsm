@@ -79,6 +79,8 @@ def download_file(path: Path, max_size: int) -> Path:
             raise FileTransferError("Path is a directory; use folder download for directories.")
         raise FileTransferError("Path is not a file or does not exist.")
     size = path.stat().st_size
+    if size == 0:
+        raise FileTransferError("File is empty; Telegram does not allow sending empty files.")
     if size > max_size:
         raise FileTransferError(f"File size ({size}) exceeds maximum allowed ({max_size}).")
     return path

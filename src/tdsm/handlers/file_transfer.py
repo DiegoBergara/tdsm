@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from telegram import Update
+from telegram.error import BadRequest
 from telegram.ext import ContextTypes
 
 from tdsm import tmux_controller
@@ -73,6 +74,11 @@ async def handle_download(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             await update.message.reply_text("Path is not a file or directory.")
     except FileTransferError as e:
         await update.message.reply_text(f"Download error: {e.message}")
+    except BadRequest as e:
+        if "non-empty" in (e.message or "").lower():
+            await update.message.reply_text("Download error: File is empty; Telegram does not allow sending empty files.")
+        else:
+            raise
 
 
 async def handle_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
