@@ -64,8 +64,8 @@
 
 ## 10. Tests
 
-- [ ] 10.1 Tests for session creation, list, use, current, rename, kill (mock tmux and DB)
-- [ ] 10.2 Tests for provider registry and built-in providers (availability, format_user_command)
-- [ ] 10.3 Tests for command parsing and routing (auth allowlist, handler dispatch)
-- [ ] 10.4 Tests for history_store append and query
-- [ ] 10.5 Tests for session context get/set and persistence
+- [x] 10.1 Tests for session creation, list, use, current, rename, kill (mock tmux and DB)
+- [x] 10.2 Tests for provider registry and built-in providers (availability, format_user_command)
+- [x] 10.3 Tests for command parsing and routing (auth allowlist, handler dispatch)
+- [x] 10.4 Tests for history_store append and query
+- [x] 10.5 Tests for session context get/set and persistence
